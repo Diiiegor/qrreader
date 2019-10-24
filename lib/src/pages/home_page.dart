@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:qrreaderapp/src/bloc/scans_bloc.dart';
+import 'package:qrreaderapp/src/models/scan_model.dart';
 import 'package:qrreaderapp/src/pages/direcciones_page.dart';
 import 'package:qrreaderapp/src/pages/mapas_page.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
+import 'package:qrreaderapp/src/providers/db_provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -14,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int paginactual=0;
+  final scansBloc=new ScansBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class _HomePageState extends State<HomePage> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.delete_forever),
-              onPressed: (){},
+              onPressed: ()=>scansBloc.borrarScanTodos(),
             )
           ],
         ),
@@ -45,18 +49,19 @@ class _HomePageState extends State<HomePage> {
     //http://ieo.com.co/
     //geo:5.05483704611272,-75.49949152434624
 
-    String futureString='';
+    String futureString='http://ieo.com.co/';
 
     /*try{
       futureString= await new QRCodeReader().scan();
     }catch(e){
       print(e.toString());
     }
-    print('futureString: $futureString');
+    */
 
     if(futureString!= null){
-      print('Tenemos informacion');
-    }*/
+      final scan=ScanModel(valor: futureString);
+      scansBloc.agregarScan(scan);
+    }
 
   }
 
